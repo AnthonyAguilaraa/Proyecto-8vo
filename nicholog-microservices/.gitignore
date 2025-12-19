@@ -1,0 +1,15 @@
+
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos de configuración de IDEs (si estás usando VSCode, por ejemplo)
+.vscode/
+
+# Ignorar el archivo .env (contiene credenciales y variables sensibles)
+.env
+
+# Ignorar archivos de log
+*.log
+
+
+
