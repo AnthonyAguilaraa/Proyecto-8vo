@@ -17,7 +17,7 @@ app.use(express.json());
 // 1. Auth Service
 app.use('/api/auth', proxy('http://auth-service:5001')); 
 
-// 2. Catalog Service
+// 2. Catalog Service.
 app.use('/api/catalog', proxy('http://catalog-service:5002'));
 
 // 3. Analytics Service
@@ -26,7 +26,7 @@ app.use('/api/analytics', proxy('http://analytics-service:5003'));
 // 4. Upload Service
 app.use('/api/upload', proxy('http://upload-service:5004', {
     limit: '50mb',
-    parseReqBody: false // Importante para que pase el archivo tal cual
+    parseReqBody: false 
     }));
 
 app.get('/', (req, res) => {
