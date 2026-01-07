@@ -47,4 +47,11 @@ const deleteImage = async (imageUrl) => {
     }
 };
 
+cloudinary.config({
+    cloud_name: 'dxdesco5g',          // Tu cloud name real
+    api_key: '749715267827861',       // Tu api key real
+    api_secret: 'JMDZXEaXTIc3wMCnb--sU001-Zk' // Tu secret real
+});
+
+
 module.exports = { uploadMiddleware, deleteImage };

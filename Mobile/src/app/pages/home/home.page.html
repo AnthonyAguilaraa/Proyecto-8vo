@@ -1,0 +1,68 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar style="--background: transparent;">
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" color="medium">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  <div class="ion-margin-bottom animate-enter" style="padding-left: 5px;">
+    <p style="font-size: 1.2em; color: #888; margin-bottom: 0;">Bienvenido de nuevo,</p>
+    <h1 style="font-size: 2.5em; font-weight: 700; margin-top: 5px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      {{ username }}
+    </h1>
+  </div>
+
+  <h3 style="font-weight: 600; color: #444; margin-top: 30px; margin-bottom: 15px;">
+    Mis Colecciones
+  </h3>
+
+  <ion-list *ngIf="collections.length > 0" style="background: transparent;">
+    
+    <ion-card *ngFor="let col of collections" 
+              button 
+              [routerLink]="['/items', col.name, col._id]"
+              class="animate-enter"
+              style="margin-bottom: 15px; border-radius: 16px; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: visible;">
+      
+      <ion-item lines="none" style="--background: transparent; padding-top: 5px; padding-bottom: 5px;">
+        
+        <div slot="start" style="background: var(--primary-gradient); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(76, 110, 245, 0.3);">
+          <ion-icon name="folder-open-outline" style="color: white; font-size: 24px;"></ion-icon>
+        </div>
+
+        <ion-label>
+          <h2 style="font-weight: 700; font-size: 1.1em;">{{ col.name }}</h2>
+          <p style="color: #888; font-size: 0.9em;">
+            {{ col.itemCount || 0 }} items guardados
+          </p>
+        </ion-label>
+
+        <ion-icon name="chevron-forward-outline" slot="end" color="medium"></ion-icon>
+      
+      </ion-item>
+    </ion-card>
+
+  </ion-list>
+
+  <div *ngIf="collections.length === 0" class="ion-text-center ion-margin-top animate-enter" style="margin-top: 50px;">
+    <div style="background: #f0f2f5; width: 100px; height: 100px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+      <ion-icon name="file-tray-outline" style="font-size: 50px; color: #ccc;"></ion-icon>
+    </div>
+    <h3 style="color: #666; margin-top: 20px;">Sin colecciones</h3>
+    <p style="color: #999;">¡Empieza creando tu primera lista!</p>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openCreateAlert()" style="--background: var(--primary-gradient);">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

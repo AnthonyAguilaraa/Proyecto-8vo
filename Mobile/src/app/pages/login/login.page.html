@@ -1,0 +1,43 @@
+<ion-content class="ion-padding">
+  
+  <div class="ion-text-center ion-margin-top animate-enter">
+    
+    <div style="background: var(--primary-gradient); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(76, 110, 245, 0.4);">
+      <ion-icon name="person" style="font-size: 40px; color: white;"></ion-icon>
+    </div>
+
+    <h1 style="font-weight: 700; color: #333; margin-bottom: 5px;">Bienvenido</h1>
+    <p style="color: #666; margin-bottom: 40px;">Gestiona tu colección como un experto</p>
+
+    <ion-item lines="none" class="modern-input">
+      <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        placeholder="Correo Electrónico" 
+        type="email" 
+        [(ngModel)]="credentials.email">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" class="modern-input">
+      <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        placeholder="Contraseña" 
+        type="password" 
+        [(ngModel)]="credentials.password">
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" class="modern-btn" (click)="login()" [disabled]="loading">
+      <span *ngIf="!loading">INGRESAR</span>
+      <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+    </ion-button>
+
+    <div class="ion-margin-top">
+      <p style="font-size: 0.9em; color: #888;">
+        ¿No tienes cuenta? 
+        <strong style="color: #4c6ef5; cursor: pointer;" routerLink="/register">Regístrate aquí</strong>
+      </p>
+    </div>
+
+  </div>
+</ion-content>

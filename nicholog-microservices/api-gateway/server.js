@@ -24,7 +24,10 @@ app.use('/api/catalog', proxy('http://catalog-service:5002'));
 app.use('/api/analytics', proxy('http://analytics-service:5003'));
 
 // 4. Upload Service
-app.use('/api/upload', proxy('http://upload-service:5004'));
+app.use('/api/upload', proxy('http://upload-service:5004', {
+    limit: '50mb',
+    parseReqBody: false // Importante para que pase el archivo tal cual
+    }));
 
 app.get('/', (req, res) => {
     res.send('API GATEWAY NICHOLOG - FUNCIONANDO EN DOCKER 🐳');

@@ -1,0 +1,53 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar style="--background: transparent;">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" color="primary" text=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="ion-text-center ion-margin-top animate-enter">
+
+    <div style="background: var(--primary-gradient); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(166, 75, 244, 0.4);">
+      <ion-icon name="person-add" style="font-size: 40px; color: white;"></ion-icon>
+    </div>
+
+    <h1 style="font-weight: 700; color: #333; margin-bottom: 5px;">Únete a NichoLog</h1>
+    <p style="color: #666; margin-bottom: 30px;">Crea tu cuenta en segundos</p>
+
+    <ion-item lines="none" class="modern-input">
+      <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        placeholder="Nombre de Usuario" 
+        type="text" 
+        [(ngModel)]="user.username">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" class="modern-input">
+      <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        placeholder="Correo Electrónico" 
+        type="email" 
+        [(ngModel)]="user.email">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" class="modern-input">
+      <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        placeholder="Contraseña" 
+        type="password" 
+        [(ngModel)]="user.password">
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" class="modern-btn" (click)="register()">
+      REGISTRARSE
+    </ion-button>
+
+  </div>
+
+</ion-content>

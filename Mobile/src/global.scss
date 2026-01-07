@@ -1,3 +1,5 @@
+/* 1. Importar Fuente Poppins de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -35,3 +37,96 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* --- TEMA GLOBAL MODERNO --- */
+
+:root {
+  /* Usamos la fuente nueva en toda la app */
+  --ion-font-family: 'Poppins', sans-serif;
+
+  /* Degradado Principal (Azul Eléctrico a Violeta) */
+  --primary-gradient: linear-gradient(135deg, #4c6ef5 0%, #a64bf4 100%);
+  
+  /* Color de fondo moderno (Un gris muy suave para que resalten las tarjetas) */
+  --ion-background-color: #f4f5f8;
+}
+
+/* Modo Oscuro (Mejora el contraste) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-background-color: #121212;
+    --ion-card-background: #1e1e1e;
+  }
+}
+
+/* --- MEJORAS EN COMPONENTES --- */
+
+/* 1. Títulos más bonitos */
+ion-title {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* 2. Botones con Degradado y sombra */
+ion-button.modern-btn {
+  --background: var(--primary-gradient);
+  --border-radius: 12px;
+  --box-shadow: 0 4px 10px rgba(76, 110, 245, 0.3);
+  font-weight: 600;
+  text-transform: none; /* Quita el texto todo mayúscula */
+  margin-top: 15px;
+}
+
+/* 3. Inputs más limpios (Estilo "Píldora") */
+ion-item.modern-input {
+  --background: #ffffff;
+  --border-radius: 12px;
+  --padding-start: 15px;
+  --inner-padding-end: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 15px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Ajuste para modo oscuro de los inputs */
+@media (prefers-color-scheme: dark) {
+  ion-item.modern-input {
+    --background: #2a2a2a;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+}
+
+/* 4. Tarjetas (Cards) Flotantes */
+ion-card {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+  transition: transform 0.2s ease; /* Pequeña animación al tocar */
+}
+
+/* Efecto al presionar una tarjeta */
+ion-card:active {
+  transform: scale(0.98);
+}
+
+/* 5. Cabecera (Toolbar) limpia */
+ion-toolbar {
+  --background: transparent; /* Fondo transparente */
+  --color: var(--ion-text-color);
+  --border-style: none; /* Sin línea abajo */
+}
+
+/* --- ANIMACIONES --- */
+
+/* Animación de entrada (Fade In hacia arriba) */
+.animate-enter {
+  animation: fadeUp 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

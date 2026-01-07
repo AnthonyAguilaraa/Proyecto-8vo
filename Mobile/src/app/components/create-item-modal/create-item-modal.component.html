@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Nuevo Item</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="ion-text-center ion-margin-bottom">
+    <div *ngIf="capturedImage" class="image-preview">
+      <img [src]="capturedImage" style="max-height: 200px; border-radius: 10px;" />
+    </div>
+    <ion-button fill="outline" (click)="takePicture()">
+      <ion-icon name="camera" slot="start"></ion-icon>
+      {{ capturedImage ? 'Cambiar Foto' : 'Agregar Foto' }}
+    </ion-button>
+  </div>
+
+  <ion-item fill="outline" class="ion-margin-bottom">
+    <ion-label position="floating">Nombre del Item *</ion-label>
+    <ion-input [(ngModel)]="name"></ion-input>
+  </ion-item>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Características Extra</ion-label>
+    </ion-list-header>
+
+    <div *ngFor="let field of customFields; let i = index" class="field-row">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="5">
+            <ion-item fill="solid">
+              <ion-input placeholder="Ej: Color" [(ngModel)]="field.key"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="5">
+            <ion-item fill="solid">
+              <ion-input placeholder="Ej: Rojo" [(ngModel)]="field.value"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button color="danger" fill="clear" (click)="removeField(i)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-list>
+
+  <ion-button expand="block" fill="outline" (click)="addField()" class="ion-margin-bottom">
+    <ion-icon name="add" slot="start"></ion-icon>
+    Agregar Característica
+  </ion-button>
+
+  <ion-button expand="block" (click)="save()" [disabled]="!name || isUploading">
+    {{ isUploading ? 'Subiendo...' : 'Guardar Item' }}
+  </ion-button>
+
+</ion-content>
