@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth';
 })
 export class RegisterPage {
 
-  // Objeto para guardar los datos del formulario
+  // Objeto para guardar los datos del formulario.
   user = {
     username: '',
     email: '',
