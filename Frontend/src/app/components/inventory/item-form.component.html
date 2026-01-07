@@ -1,0 +1,116 @@
+<div class="form-container">
+  
+  <!-- Header -->
+  <div class="header">
+    <div class="title-group">
+      <button mat-icon-button (click)="goBack()" class="back-btn" matTooltip="Cancelar y volver">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div>
+        <h1>{{ isEditMode ? 'Editar Artículo' : 'Nuevo Artículo' }}</h1>
+        <p class="subtitle">En colección: <strong>{{ collectionName }}</strong></p>
+      </div>
+    </div>
+    <div class="actions">
+      <button mat-button (click)="goBack()">Cancelar</button>
+      <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="itemForm.invalid" class="save-btn">
+        <mat-icon>save</mat-icon> Guardar
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="itemForm" class="main-layout">
+    
+    <!-- COLUMNA IZQUIERDA: VISUAL -->
+    <div class="visual-column">
+      <mat-card class="visual-card">
+        <div class="image-preview" 
+             [style.background-image]="imagePreview ? 'url(' + imagePreview + ')' : 'none'">
+          <div class="placeholder" *ngIf="!imagePreview">
+            <mat-icon>image</mat-icon>
+            <span>Sin Imagen</span>
+          </div>
+        </div>
+        <mat-card-content class="visual-content">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>URL de la Imagen</mat-label>
+            <input matInput formControlName="imageUrl" placeholder="https://...">
+            <mat-icon matSuffix>link</mat-icon>
+          </mat-form-field>
+          <!-- Aquí iría el botón de subir imagen en el futuro -->
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Datos Financieros Rápidos -->
+      <mat-card class="financial-card" formGroupName="acquisition">
+        <mat-card-header>
+          <mat-card-title>Datos de Inversión</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="financial-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Precio Compra</mat-label>
+            <span matPrefix>$&nbsp;</span>
+            <input matInput type="number" formControlName="price">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Valor Estimado</mat-label>
+            <span matPrefix>$&nbsp;</span>
+            <input matInput type="number" formControlName="estimatedValue">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha de Adquisición</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- COLUMNA DERECHA: DATOS -->
+    <div class="data-column">
+      <mat-card class="data-card">
+        <mat-card-header>
+          <mat-card-title>Detalles del Artículo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          
+          <mat-form-field appearance="outline" class="full-width name-field">
+            <mat-label>Nombre del Artículo</mat-label>
+            <input matInput formControlName="name" placeholder="Ej. Amazing Spider-Man #300">
+          </mat-form-field>
+
+          <mat-divider class="divider"></mat-divider>
+          <h3 class="section-title">Atributos Específicos</h3>
+
+          <div formGroupName="dynamicData" class="dynamic-grid">
+            <ng-container *ngFor="let field of template?.fields">
+              
+              <!-- Renderizado dinámico según tipo -->
+              <div [class.full-span]="field.width === 'full'" [class.half-span]="field.width !== 'full'">
+                
+                <mat-form-field appearance="outline" class="full-width" *ngIf="field.type !== 'checkbox'">
+                  <mat-label>{{ field.name }}</mat-label>
+                  
+                  <input matInput *ngIf="field.type === 'text-short' || field.type === 'number'" 
+                         [type]="field.type === 'number' ? 'number' : 'text'" 
+                         [formControlName]="field.name">
+                  
+                  <textarea matInput *ngIf="field.type === 'text-long'" [formControlName]="field.name" rows="3"></textarea>
+                  
+                  <mat-select *ngIf="field.type === 'selector'" [formControlName]="field.name">
+                    <mat-option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-checkbox *ngIf="field.type === 'checkbox'" [formControlName]="field.name">{{ field.name }}</mat-checkbox>
+              </div>
+            </ng-container>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,68 @@
+<div class="inventory-container">
+  <div class="header">
+    <div class="title-group">
+      <button mat-icon-button routerLink="/dashboard/colecciones" matTooltip="Volver a mis colecciones">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ collectionName }}</h1>
+    </div>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" [routerLink]="['./nuevo']">
+      <mat-icon>add</mat-icon>
+      Añadir Artículo
+    </button>
+  </div>
+
+  <div @listStagger *ngIf="items$ | async as items; else loading">
+    <div *ngIf="items.length === 0; else grid" class="empty-state">
+      <mat-icon class="empty-icon">inventory_2</mat-icon>
+      <h2>Esta colección está vacía</h2>
+      <p>Añade tu primer artículo para empezar.</p>
+    </div>
+
+    <ng-template #grid>
+      <div class="items-grid">
+        <mat-card *ngFor="let item of items" 
+                  class="item-card"
+                  [routerLink]="['./editar', item._id]">
+          
+          <!-- Parte Visual: Imagen del Artículo -->
+          <div class="card-visual" 
+               [style.background-image]="'url(' + (item.images && item.images.length > 0 ? item.images[0] : 'https://placehold.co/600x400?text=Sin+Imagen') + ')'">
+            
+            <!-- Badge de Precio (Overlay) -->
+            <div class="price-badge" *ngIf="item.acquisition?.price">
+              Valor: {{ item.acquisition?.price | currency }}
+            </div>
+          </div>
+
+          <mat-card-content class="card-content">
+            <h2 class="item-title">{{ item.name }}</h2>
+            
+            <!-- Datos dinámicos (Resumen limpio) -->
+            <div class="meta-info">
+              <ng-container *ngFor="let key of objectKeys(item.dynamicData) | slice:0:4">
+                <span class="info-pill">
+                  <strong>{{ key }}:</strong> {{ item.dynamicData[key] }}
+                </span>
+              </ng-container>
+            </div>
+          </mat-card-content>
+
+          <!-- Acción al hacer hover: ELIMINAR -->
+          <div class="card-hover-action delete-action" (click)="deleteItem(item._id, $event)">
+            <span>Eliminar</span>
+            <mat-icon>delete</mat-icon>
+          </div>
+
+        </mat-card>
+      </div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </ng-template>
+</div>

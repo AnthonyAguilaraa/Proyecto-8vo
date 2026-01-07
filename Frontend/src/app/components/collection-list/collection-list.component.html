@@ -1,0 +1,83 @@
+<div class="container" [@listStagger]="(collections$ | async)?.length">
+  
+  <div class="header-actions">
+    <div>
+      <h1>Mis Colecciones</h1>
+      <p>Gestiona tus categorías y moldes</p>
+    </div>
+    <button mat-flat-button color="primary" routerLink="/dashboard/colecciones/nueva" class="add-btn">
+      <mat-icon>add</mat-icon>
+      Nueva Colección
+    </button>
+  </div>
+
+  <div class="grid" *ngIf="collections$ | async as collections; else loading">
+    
+    <!-- TARJETA PREMIUM -->
+    <mat-card *ngFor="let col of collections" 
+              class="collection-card"
+              [routerLink]="['/dashboard/inventario', col.name]">
+      
+      <!-- Cabecera Visual con Gradiente -->
+      <div class="card-visual" [style.background]="getCardGradient(col.name)">
+        <div class="visual-icon">
+          {{ col.name.charAt(0) | uppercase }}
+        </div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()" class="more-btn">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
+
+      <mat-card-content class="card-content">
+        <h2 class="collection-title">{{ col.name }}</h2>
+        <div class="meta-info">
+          <span class="badge">{{ col.fields?.length || 0 }} Campos</span>
+          <span class="date" *ngIf="col.createdAt">Creado el {{ col.createdAt | date:'dd/MM/yy' }}</span>
+        </div>
+      </mat-card-content>
+
+      <div class="card-hover-action">
+        <span>Ver Inventario</span>
+        <mat-icon>arrow_forward</mat-icon>
+      </div>
+
+      <!-- Menú de Acciones -->
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editCollection(col._id, $event)">
+          <mat-icon>edit</mat-icon> Editar Estructura
+        </button>
+        <button mat-menu-item (click)="deleteCollection(col._id, $event)">
+          <mat-icon color="warn">delete</mat-icon> Eliminar
+        </button>
+      </mat-menu>
+
+    </mat-card>
+
+    <!-- Tarjeta para crear nueva (Opcional, visualmente atractiva) -->
+    <mat-card class="collection-card new-card" routerLink="/dashboard/colecciones/nueva">
+      <div class="new-content">
+        <div class="new-icon">
+          <mat-icon>add</mat-icon>
+        </div>
+        <h3>Crear Nueva</h3>
+      </div>
+    </mat-card>
+
+  </div>
+
+  <!-- Estado Vacío -->
+  <div *ngIf="(collections$ | async)?.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">category</mat-icon>
+    <h3>No tienes colecciones aún</h3>
+    <p>Crea tu primera colección para empezar a organizar tus artículos.</p>
+    <button mat-raised-button color="primary" routerLink="/dashboard/colecciones/nueva">
+      Crear Colección
+    </button>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    </div>
+  </ng-template>
+</div>

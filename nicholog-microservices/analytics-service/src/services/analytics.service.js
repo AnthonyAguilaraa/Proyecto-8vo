@@ -1,88 +1,144 @@
+const mongoose = require('mongoose');
 const Item = require('../models/Item');
 const CollectionTemplate = require('../models/CollectionTemplate');
 
-// --- FUNCIONES AUXILIARES ---
-
-// Obtener el "Santo Grial" (Item más valioso)
-const getTopItem = async (myTemplateIds) => {
-    const topItem = await Item.find({
-        templateId: { $in: myTemplateIds }
-    })
-    .sort({ 'acquisition.estimatedValue': -1 }) // Orden descendente por valor
-    .limit(1)
-    .select('name acquisition images'); 
-
-    return topItem.length > 0 ? topItem[0] : null;
-};
-
-// Obtener actividad reciente (Timeline)
-const getRecentActivity = async (myTemplateIds) => {
-    const recentItems = await Item.find({
-        templateId: { $in: myTemplateIds }
-    })
-    .sort({ createdAt: -1 }) // Orden descendente por fecha
-    .limit(5)
-    .select('name acquisition createdAt'); 
-
-    return recentItems;
-};
-
-// --- FUNCIÓN PRINCIPAL DASHBOARD ---
-
+// --- FUNCIÓN 1: Estadísticas Generales ---
 const getDashboardStats = async (userId) => {
-    // 1. Obtener colecciones del usuario
-    const userCollections = await CollectionTemplate.find({ userId: userId });
-    
-    if (!userCollections.length) {
+    try {
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+
+        const pipeline = [
+            {
+                $lookup: {
+                    from: 'collectiontemplates',
+                    localField: 'templateId',
+                    foreignField: '_id',
+                    as: 'template'
+                }
+            },
+            { $unwind: '$template' },
+            { $match: { 'template.userId': userObjectId }  }
+        ];
+
+        const totals = await Item.aggregate([
+            ...pipeline,
+            {
+                $group: {
+                    _id: null,
+                    totalCost: { $sum: '$acquisition.price' },
+                    totalValue: { $sum: '$acquisition.estimatedValue' },
+                    itemCount: { $sum: 1 }
+                }
+            }
+        ]);
+
+        const stats = totals.length > 0 ? totals[0] : { totalCost: 0, totalValue: 0, itemCount: 0 };
+
+        const distribution = await Item.aggregate([
+            ...pipeline,
+            {
+                $group: {
+                    _id: '$template.name',
+                    value: { $sum: '$acquisition.price' }
+                }
+            },
+            { $project: { label: '$_id', value: 1, _id: 0 } },
+            { $sort: { value: -1 } }
+        ]);
+
+        const totalInvested = stats.totalCost || 1;
+        const categoryDistribution = distribution.map(cat => ({
+            ...cat,
+            percentage: Math.round((cat.value / totalInvested) * 100)
+        }));
+
+        const topItems = await Item.aggregate([
+            ...pipeline,
+            { $sort: { 'acquisition.estimatedValue': -1 } },
+            { $limit: 5 },
+            { 
+                $project: { 
+                    name: 1, 
+                    value: '$acquisition.estimatedValue', 
+                    image: { $arrayElemAt: ['$images', 0] },
+                    collectionName: '$template.name'
+                } 
+            }
+        ]);
+
         return {
-            totalInvestment: 0,
-            totalValue: 0,
-            profit: 0,
-            itemCount: 0,
-            chartData: [],
-            topItem: null,
-            recentActivity: []
+            totalCost: stats.totalCost,
+            totalValue: stats.totalValue,
+            itemCount: stats.itemCount,
+            categoryDistribution,
+            topItems
         };
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+// --- FUNCIÓN 2: Detalles (CORREGIDA) ---
+const getMetricDetails = async (userId, metric) => {
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const pipeline = [
+        {
+            $lookup: {
+                from: 'collectiontemplates',
+                localField: 'templateId',
+                foreignField: '_id',
+                as: 'template'
+            }
+        },
+        { $unwind: '$template' },
+        { $match: { 'template.userId': userObjectId } }
+    ];
+
+    let sortField;
+    let valueField;
+    let dateField = '$acquisition.date';
+
+    switch (metric) {
+        case 'costo':
+            // CORRECCIÓN: Quitamos el '$' para el ordenamiento
+            sortField = 'acquisition.price'; 
+            // Mantenemos el '$' para obtener el valor
+            valueField = '$acquisition.price';
+            break;
+        case 'valor':
+            // CORRECCIÓN: Quitamos el '$'
+            sortField = 'acquisition.estimatedValue';
+            valueField = '$acquisition.estimatedValue';
+            break;
+        case 'items':
+            // CORRECCIÓN: Quitamos el '$'
+            sortField = 'createdAt';
+            valueField = { $literal: null };
+            dateField = '$createdAt';
+            break;
+        default:
+            throw new Error('Métrica no válida');
     }
 
-    const collectionIds = userCollections.map(col => col._id);
-    const items = await Item.find({ templateId: { $in: collectionIds } });
+    pipeline.push(
+        // Ahora sortField es 'acquisition.price', lo cual es válido para MongoDB
+        { $sort: { [sortField]: -1 } },
+        {
+            $project: {
+                _id: 0,
+                name: 1,
+                collectionName: '$template.name',
+                value: valueField,
+                date: dateField,
+                image: { $arrayElemAt: ['$images', 0] }
+            }
+        }
+    );
 
-    // 2. Calcular Totales
-    let totalInvestment = 0;
-    let totalValue = 0;
-    const distribution = {}; // Para el gráfico
-
-    items.forEach(item => {
-        totalInvestment += item.acquisition.price || 0;
-        totalValue += item.acquisition.estimatedValue || 0;
-
-        // Contar para gráfico por colección
-        const colId = item.templateId.toString();
-        distribution[colId] = (distribution[colId] || 0) + 1;
-    });
-
-    const profit = totalValue - totalInvestment;
-    
-    // Preparar datos para gráficos
-    const chartData = userCollections.map(col => ({
-        name: col.name,
-        count: distribution[col._id.toString()] || 0
-    })).filter(d => d.count > 0);
-
-    // 3. Obtener Widgets adicionales
-    const topItemResult = await getTopItem(collectionIds);
-    const recentActivityResult = await getRecentActivity(collectionIds);
-
-    return {
-        totalInvestment,
-        totalValue,
-        profit,
-        itemCount: items.length,
-        chartData,
-        topItem: topItemResult,
-        recentActivity: recentActivityResult
-    };
+    const items = await Item.aggregate(pipeline);
+    return items;
 };
 
-module.exports = { getDashboardStats };
+module.exports = { getDashboardStats, getMetricDetails };

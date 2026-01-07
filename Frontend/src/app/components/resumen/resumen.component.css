@@ -1,0 +1,366 @@
+/* --- ESTILOS DE TARJETAS PREMIUM --- */
+
+/* Base para todas las tarjetas (Widgets y Gráficos) */
+.widget-card, .chart-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Curva de animación suave */
+  position: relative; /* Necesario para z-index */
+}
+
+/* Efecto Hover: Elevación y Sombra Profunda */
+.widget-card:hover, .chart-card:hover {
+  transform: translateY(-5px) scale(1.01); /* Se eleva y crece muy sutilmente */
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1); /* Sombra difusa estilo 'glass' */
+  z-index: 5; /* Se pone por encima de otros elementos */
+}
+
+/* Cursor de mano solo si es un enlace */
+.widget-card[routerLink] {
+  cursor: pointer;
+}
+
+.dashboard-container {
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.header p {
+  margin: 0;
+  color: #718096;
+}
+
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.widget-card {
+  border-left: 4px solid transparent;
+}
+
+.widget-card mat-card-content {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+}
+
+.widget-icon {
+  background: #f5f5f5;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.widget-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-data .label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.widget-data .value {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.cost-card { border-left-color: #3f51b5; }
+.cost-card .widget-icon { color: #3f51b5; background: #e8eaf6; }
+
+.value-card { border-left-color: #4caf50; }
+.value-card .widget-icon { color: #4caf50; background: #e8f5e9; }
+
+.count-card { border-left-color: #ff9800; }
+.count-card .widget-icon { color: #ff9800; background: #fff3e0; }
+
+/* Estilos ROI (Rentabilidad) */
+.roi-card { border-left-color: #2e7d32; }
+.roi-card .widget-icon { color: #2e7d32; background: #e8f5e9; }
+.roi-card.negative { border-left-color: #d32f2f; }
+.roi-card.negative .widget-icon { color: #d32f2f; background: #ffebee; }
+
+.profit { color: #2e7d32; }
+.loss { color: #d32f2f; }
+
+/* --- GRÁFICO HISTÓRICO --- */
+.history-card {
+  grid-column: 1 / -1; /* Ocupa todo el ancho disponible */
+  border-left: 4px solid #3f51b5;
+}
+
+.line-chart-container {
+  width: 100%;
+  height: 200px;
+  padding: 10px 0;
+}
+
+.line-chart {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.chart-line {
+  filter: drop-shadow(0px 4px 6px rgba(63, 81, 181, 0.3)); /* Sombra suave para efecto 3D */
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease-out forwards;
+}
+
+.chart-area {
+  opacity: 0;
+  animation: fillArea 1s ease-out 1s forwards; /* Empieza después de que la línea se dibuje */
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fillArea {
+  to { opacity: 1; }
+}
+
+/* Gráficos */
+.chart-card {
+  margin-top: 24px;
+}
+
+.chart-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  padding: 24px;
+}
+
+.pie-chart-container-svg {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.pie-chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* Permite que la rebanada se salga un poco al crecer */
+}
+
+.pie-slice {
+  stroke: #fff; /* Borde blanco para separar rebanadas */
+  stroke-width: 0.02;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease; /* Efecto rebote suave */
+  cursor: pointer;
+  transform-origin: 0 0; /* Escalar desde el centro */
+}
+
+.pie-slice:hover {
+  transform: scale(1.1); /* Crece un 10% */
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); /* Sombra para dar profundidad */
+  z-index: 10;
+}
+
+.legend {
+  min-width: 200px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.cat-name { flex: 1; margin-right: 16px; }
+.cat-value { font-weight: bold; }
+
+/* --- TOP ITEMS LIST (Joyas) --- */
+.top-items-list {
+  margin-top: 16px;
+}
+
+.top-item-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease-in-out; /* Suavidad */
+  position: relative; /* Para z-index */
+  border-radius: 8px; /* Bordes redondeados al hacer hover */
+}
+
+/* Efecto Premium al pasar el mouse */
+.top-item-row:hover {
+  background-color: #ffffff;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 10;
+  padding-left: 8px; /* Pequeño indentado visual */
+  padding-right: 8px;
+  border-bottom-color: transparent; /* Ocultar la línea para que se vea flotando */
+}
+
+.top-item-row:last-child { border-bottom: none; }
+
+.item-thumb {
+  width: 48px;       /* Tamaño fijo ancho */
+  height: 48px;      /* Tamaño fijo alto */
+  border-radius: 8px;
+  object-fit: cover; /* CLAVE: Recorta la imagen para que llene el cuadro sin deformarse */
+  margin-right: 16px;
+  background: #f5f5f5;
+}
+
+.item-info { flex: 1; display: flex; flex-direction: column; }
+.item-name { font-weight: 500; font-size: 0.95rem; }
+.item-collection { font-size: 0.8rem; color: #777; }
+.item-value { font-weight: bold; color: #3f51b5; }
+
+.loading-container {
+  display: block;
+  margin-bottom: 32px;
+}
+
+/* --- SKELETON LOADERS --- */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.skeleton-card {
+  height: 120px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0));
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* --- ACTIVITY FEED --- */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease-in-out; /* Suavidad */
+  position: relative; /* Para z-index */
+  border-radius: 8px; /* Bordes redondeados al hacer hover */
+}
+
+.activity-item:hover {
+  background-color: #ffffff;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 10;
+  padding: 12px 8px; /* Ajustar padding para que no se corte */
+  border-bottom-color: transparent; /* Ocultar la línea para que se vea flotando */
+}
+
+.activity-item:last-child { border-bottom: none; }
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.activity-icon mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+.activity-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.act-text { font-size: 13px; color: #333; }
+.act-time { font-size: 11px; color: #999; }
+
+/* Color del borde para la tarjeta de actividad */
+.activity-card { border-left-color: #009688; }
+
+/* --- LAYOUT RESPONSIVO (Desktop) --- */
+@media (min-width: 1200px) {
+  .widgets-grid {
+    /* Forzamos 4 columnas en pantallas grandes */
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* El gráfico histórico ocupa todo el ancho */
+  .history-card {
+    grid-column: 1 / -1;
+  }
+
+  /* Distribución de la fila inferior: 1 (Pastel) - 2 (Joyas) - 1 (Actividad) */
+  .chart-card {
+    grid-column: span 1;
+  }
+
+  .chart-card.top-items-card {
+    grid-column: span 2;
+  }
+}
+
+/* --- BOTÓN DE REPORTE --- */
+.export-btn {
+  border-radius: 24px; /* Botón redondeado estilo 'pill' */
+  padding: 0 24px;
+  border-color: #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background-color: #fff;
+  border-color: #3f51b5;
+  color: #3f51b5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.15);
+}

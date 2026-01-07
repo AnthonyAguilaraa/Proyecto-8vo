@@ -1,0 +1,162 @@
+.container {
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-btn {
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #f5f5f5;
+  transform: translateX(-3px); /* Pequeño movimiento a la izquierda */
+}
+
+.mat-headline-5 {
+  margin: 0 0 4px 0;
+  font-weight: 600;
+  color: #1a202c; /* Color oscuro suave */
+  letter-spacing: -0.5px;
+}
+
+.mat-body-1 {
+  color: #718096;
+  font-size: 0.95rem;
+}
+
+table {
+  width: 100%;
+}
+
+.item-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px; /* Bordes más redondeados */
+  object-fit: cover;
+  background: #edf2f7;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.value-cell {
+  font-weight: 600;
+  text-align: right;
+  color: #2b6cb0; /* Azul profesional */
+  font-family: 'Roboto Mono', monospace; /* Alineación numérica perfecta */
+  font-size: 1rem;
+}
+
+/* --- ESTILOS DE TABLA MATERIAL PERSONALIZADOS --- */
+
+/* Cabecera de la tabla */
+th.mat-mdc-header-cell, th.mat-header-cell {
+  background-color: #f7fafc;
+  color: #4a5568;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+/* Celdas del cuerpo */
+td.mat-mdc-cell, td.mat-cell {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #2d3748;
+}
+
+/* --- EFECTO PREMIUM EN FILAS --- */
+tr.mat-mdc-row, tr.mat-row {
+  transition: all 0.2s ease-in-out;
+  position: relative; /* Necesario para que z-index funcione */
+}
+
+/* Efecto Hover en filas */
+tr.mat-mdc-row:hover, tr.mat-row:hover {
+  background-color: #ffffff; /* Fondo blanco para que la sombra se vea */
+  transform: scale(1.02); /* Ligeramente más grande */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1); /* Sombra más pronunciada */
+  z-index: 10; /* Para que la fila se ponga por encima de las demás */
+  cursor: default;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  color: #d32f2f;
+  background-color: #ffebee;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+/* --- BOTONES Y ACCIONES --- */
+.actions {
+  display: flex;
+  gap: 12px; /* Espaciado limpio entre botones */
+}
+
+.animate-btn {
+  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease;
+}
+
+.animate-btn:hover:not([disabled]) {
+  transform: translateY(-3px); /* Efecto de elevación */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* Sombra suave */
+  z-index: 1;
+}
+
+/* Ajuste para que la tabla llene la tarjeta sin bordes extraños */
+mat-card {
+  border-radius: 12px;
+  overflow: hidden; /* Para que la cabecera de la tabla respete el borde redondeado */
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* --- BOTÓN DE REPORTE --- */
+.export-btn {
+  border-radius: 24px; /* Botón redondeado estilo 'pill' */
+  padding: 0 24px;
+  border-color: #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover:not([disabled]) {
+  background-color: #e3f2fd; /* Fondo azul muy claro al pasar el mouse */
+  border-color: #1976d2;
+}
